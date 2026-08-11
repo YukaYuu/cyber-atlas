@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# cyber-atlas
 
-## Getting Started
+A dark, animated world map that replays real, community-reported attack-source
+data — inspired by [NICTER Atlas](https://www.nicter.jp/atlas), NICT's
+darknet-sensor cyberattack visualization.
 
-First, run the development server:
+## What it shows
+
+Pulsing, color-coded markers sweep across a world map as attack events are
+"replayed," alongside a live event ticker, a per-category stats panel, and
+playback controls (pause / 1x / 2x / 4x).
+
+## Data sources — and an important caveat
+
+- **IP addresses and attack categories are real**, pulled from
+  [blocklist.de](https://www.blocklist.de/en/export.html), a community
+  project that aggregates fail2ban-style abuse reports (SSH, FTP, mail,
+  Apache, IMAP, bot/malware scans, generic login brute force) from
+  participating server operators worldwide.
+- **Geolocation is real**, via [ip-api.com](https://ip-api.com/)'s free
+  batch endpoint.
+- **Timestamps are synthetic.** blocklist.de's lists are a rolling snapshot
+  of IPs reported in roughly the last 48 hours, not a timestamped event
+  stream. `scripts/build_dataset.py` assigns each event a randomized
+  timestamp within a 24-hour replay window purely so the animation has
+  something to sequence by. The *who* and *what category* are real; the
+  *exact moment* shown during playback is not — this is a stylistic replay,
+  not a live feed or an authoritative attack timeline.
+
+This is a deliberate, documented tradeoff: real honeypot/darknet-sensor data
+with genuine per-event timestamps (closer to what NICTER Atlas itself uses)
+would need a running sensor and isn't something a static portfolio project
+can responsibly claim to have without actually operating one.
+
+## Tech stack
+
+- [Next.js](https://nextjs.org/) 16 (App Router, Turbopack) / React 19 / TypeScript
+- [MapLibre GL JS](https://maplibre.org/) + react-map-gl — map rendering
+- Tailwind CSS
+- Python (data pipeline, `scripts/build_dataset.py`, standard library only)
+
+## Running locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Regenerating the dataset
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+python3 scripts/build_dataset.py
+```
 
-## Learn More
+Fetches fresh IP lists from blocklist.de, geolocates a sample via ip-api.com,
+and writes `data/events.json`.
 
-To learn more about Next.js, take a look at the following resources:
+## Possible next steps
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Deploy a real low-interaction honeypot and swap the synthetic-timestamp
+  pipeline for a genuine, timestamped event log.
+- Add a GitHub Action to regenerate `data/events.json` on a schedule, so the
+  dataset stays current without a live backend.
