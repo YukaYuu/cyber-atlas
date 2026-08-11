@@ -10,6 +10,11 @@ Pulsing, color-coded markers sweep across a world map as attack events are
 "replayed," alongside a live event ticker, a per-category stats panel, and
 playback controls (pause / 1x / 2x / 4x).
 
+A separate [**/trends**](/trends) view aggregates the same dataset by attack
+category, reporting country, and hosting organization/ASN — a cross-sectional
+analysis that (unlike the replay map) doesn't depend on the synthesized
+timestamps described below.
+
 ## Data sources — and an important caveat
 
 - **IP addresses and attack categories are real**, pulled from
