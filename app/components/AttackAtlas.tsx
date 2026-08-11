@@ -10,6 +10,7 @@ import Legend from "@/app/components/Legend";
 import Ticker from "@/app/components/Ticker";
 import StatsPanel from "@/app/components/StatsPanel";
 import Controls from "@/app/components/Controls";
+import NavLink from "@/app/components/NavLink";
 
 const DARK_STYLE = {
   version: 8 as const,
@@ -91,7 +92,8 @@ export default function AttackAtlas({ dataset }: Props) {
               community-reported attack sources, replayed
             </p>
           </div>
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto flex flex-col items-end gap-3">
+            <NavLink href="/trends" label="Trends →" />
             <Legend categories={dataset.categories} />
           </div>
         </div>
