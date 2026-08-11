@@ -17,6 +17,9 @@ export type AttackEvent = {
   city: string | null;
   lat: number;
   lon: number;
+  isp: string | null;
+  org: string | null;
+  asn: string | null;
   timestamp: string;
 };
 

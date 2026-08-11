@@ -104,6 +104,9 @@ def build_events():
             "city": geo.get("city"),
             "lat": geo.get("lat"),
             "lon": geo.get("lon"),
+            "isp": geo.get("isp"),
+            "org": geo.get("org") or geo.get("isp"),
+            "asn": (geo.get("as") or "").split(" ", 1)[0] or None,
             "timestamp": ts.isoformat().replace("+00:00", "Z"),
         })
 
