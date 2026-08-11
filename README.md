@@ -55,11 +55,12 @@ python3 scripts/build_dataset.py
 ```
 
 Fetches fresh IP lists from blocklist.de, geolocates a sample via ip-api.com,
-and writes `data/events.json`.
+and writes `data/events.json`. A [scheduled GitHub Action](.github/workflows/update-dataset.yml)
+also runs this weekly and commits the result, so the dataset stays current
+without a live backend — trigger it manually anytime via the Actions tab
+("Update dataset" → "Run workflow").
 
 ## Possible next steps
 
 - Deploy a real low-interaction honeypot and swap the synthetic-timestamp
   pipeline for a genuine, timestamped event log.
-- Add a GitHub Action to regenerate `data/events.json` on a schedule, so the
-  dataset stays current without a live backend.
